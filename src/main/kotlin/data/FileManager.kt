@@ -147,7 +147,7 @@ class FileManager {
                 }
             }).apply {
                 titleProperty().bind(t)
-                dialogPane.style { font = MyStyles.defaultFont }
+                dialogPane.style { fontFamily = SettingProps.font }
                 contentText = if (mode == Mode.MOVE) "이동 중" else "복사 중"
             }.showAndWait()
         } catch (e: FileSystemException) {

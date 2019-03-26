@@ -2,6 +2,7 @@ package setting
 
 import java.io.File
 import java.io.FileInputStream
+import java.nio.charset.Charset
 import java.util.*
 
 class StringProps {
@@ -18,48 +19,51 @@ class StringProps {
         }
 
         // 상단 이름
-        internal val flowText1 = strings["flowText1"] as String
-        internal val flowText2 = strings["flowText2"] as String
-        internal val flowText3 = strings["flowText3"] as String
+        internal val flowText1 = get("flowText1")
+        internal val flowText2 = get("flowText2")
+        internal val flowText3 = get("flowText3")
 
         // 폴더 경로
-        internal val folderBorder = strings["folderBorder"] as String
-        internal val folderSearchLabel = strings["folderSearchLabel"] as String
-        internal val folderMoveLabel = strings["folderMoveLabel"] as String
-        internal val folderSelect = strings["folderSelect"] as String
+        internal val folderBorder = get("folderBorder")
+        internal val folderSearchLabel = get("folderSearchLabel")
+        internal val folderMoveLabel = get("folderMoveLabel")
+        internal val folderSelect = get("folderSelect")
 
         // 검색 조건(폴더 경로)
-        internal val existsLabel = strings["existsLabel"] as String
-        internal val exists1 = strings["exists1"] as String
-        internal val exists2 = strings["exists2"] as String
-        internal val exists3 = strings["exists3"] as String
-        internal val innerSearchCheck = strings["innerSearchCheck"] as String
-        internal val innerMoveCheck = strings["innerMoveCheck"] as String
+        internal val existsLabel = get("existsLabel")
+        internal val exists1 = get("exists1")
+        internal val exists2 = get("exists2")
+        internal val exists3 = get("exists3")
+        internal val innerSearchCheck = get("innerSearchCheck")
+        internal val innerMoveCheck = get("innerMoveCheck")
 
         // 검색 조건
-        internal val searchBorder = strings["searchBorder"] as String
-        internal val searchTextLabel = strings["searchTextLabel"] as String
-        internal val remainCheck = strings["remainCheck"] as String
-        internal val noIgnoreCaseCheck = strings["noIgnoreCaseCheck"] as String
-        internal val useRegexCheck = strings["useRegexCheck"] as String
-        internal val searchExtensionLabel = strings["searchExtensionLabel"] as String
+        internal val searchBorder = get("searchBorder")
+        internal val searchTextLabel = get("searchTextLabel")
+        internal val remainCheck = get("remainCheck")
+        internal val noIgnoreCaseCheck = get("noIgnoreCaseCheck")
+        internal val useRegexCheck = get("useRegexCheck")
+        internal val searchExtensionLabel = get("searchExtensionLabel")
 
         // 이름 변경
-        internal val namingBorder = strings["namingBorder"] as String
-        internal val namingSearchBtn = strings["namingSearchBtn"] as String
-        internal val namingAddFileBtn = strings["namingAddFileBtn"] as String
-        internal val namingAll = strings["namingAll"] as String
-        internal val namingDelete = strings["namingDelete"] as String
-        internal val namingRollback = strings["namingRollback"] as String
-        internal val namingText = strings["namingText"] as String
-        internal val namingNumber = strings["namingNumber"] as String
-        internal val extension = strings["extension"] as String
-        internal val beforeFileName = strings["beforeFileName"] as String
-        internal val afterFileName = strings["afterFileName"] as String
-        internal val filePath = strings["filePath"] as String
+        internal val namingBorder = get("namingBorder")
+        internal val namingSearchBtn = get("namingSearchBtn")
+        internal val namingAddFileBtn = get("namingAddFileBtn")
+        internal val namingAll = get("namingAll")
+        internal val namingDelete = get("namingDelete")
+        internal val namingRollback = get("namingRollback")
+        internal val namingText = get("namingText")
+        internal val namingNumber = get("namingNumber")
+        internal val extension = get("extension")
+        internal val beforeFileName = get("beforeFileName")
+        internal val afterFileName = get("afterFileName")
+        internal val filePath = get("filePath")
 
         // 이동/복사
-        internal val moveBtn = strings["moveBtn"] as String
-        internal val copyBtn = strings["copyBtn"] as String
+        internal val moveBtn = get("moveBtn")
+        internal val copyBtn = get("copyBtn")
+
+        private fun get(prop: String) =
+            String(strings.getProperty(prop).toByteArray(Charset.forName("ISO-8859-1")), Charset.forName("UTF-8"))
     }
 }

@@ -52,6 +52,8 @@ class SettingProps {
         internal var innerMoveCheck
             get() = settings["innerMoveCheck"].toString().toBoolean()
             set(value) { set("innerMoveCheck", value.toString()) }
+        // 폰트
+        internal val font = get("font")
 
         private fun get(prop: String) =
             String(settings.getProperty(prop).toByteArray(Charset.forName("ISO-8859-1")), Charset.forName("UTF-8"))

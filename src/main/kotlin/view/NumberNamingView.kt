@@ -5,6 +5,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.Spinner
 import javafx.scene.control.ToggleGroup
 import setting.MyStyles
+import setting.SettingProps
 import tornadofx.*
 
 class NumberNamingView : View("숫자 추가") {
@@ -31,6 +32,7 @@ class NumberNamingView : View("숫자 추가") {
 
     override val root = hbox {
         addClass(MyStyles.main)
+        style { fontFamily = SettingProps.font }
         alignment = Pos.CENTER
         paddingAll = 6.0
 

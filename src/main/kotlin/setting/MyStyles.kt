@@ -1,5 +1,4 @@
 package setting
-
 import javafx.scene.effect.DropShadow
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
@@ -11,7 +10,6 @@ class MyStyles : Stylesheet() {
         val help by cssclass()
         val folderLabel by cssclass()
         val folderBtn by cssclass()
-        val defaultFont = loadFont("/fonts/NanumBarunGothic.ttf", 9.0)!!
     }
 
     // 색상 팔레트
@@ -23,7 +21,6 @@ class MyStyles : Stylesheet() {
     init {
         // 메인
         main {
-            font = defaultFont
             backgroundColor += Color.LIGHTSKYBLUE
         }
 

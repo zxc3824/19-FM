@@ -13,16 +13,19 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.*
 import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
+import javafx.scene.text.FontWeight
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 import javafx.stage.Window
+import org.controlsfx.control.PopOver
 import setting.MyStyles
 import setting.SettingProps
 import setting.StringProps
 import tornadofx.*
 import tornadofx.controlsfx.borders
-import java.io.File
-import java.io.UncheckedIOException
+import java.io.*
+import java.nio.file.Files
 import java.util.regex.PatternSyntaxException
 
 
@@ -92,10 +95,11 @@ class MainView : View("File Manager") {
     override val root = vbox {
 
         // Settings
-        addClass(MyStyles.main)
-        primaryStage.sizeToScene() // 사이즈 맞춤 조절
         runLater {
+            addClass(MyStyles.main)
+            style { fontFamily = SettingProps.font }
             searchFolder.requestFocus() // 포커스 변경
+            primaryStage.sizeToScene() // 사이즈 맞춤 조절
         }
 
         // 상단 텍스트 & 도움말
@@ -109,15 +113,27 @@ class MainView : View("File Manager") {
             textflow {
                 text(StringProps.flowText1) {
                     fill = c("#0067ff")
-                    font = loadFont("/fonts/NanumBarunGothicBold.ttf", 28.0)!!
+                    style {
+                        fontFamily = SettingProps.font
+                        fontSize = 28.px
+                        fontWeight = FontWeight.BOLD
+                    }
                 }
                 text(StringProps.flowText2) {
                     fill = c("#ff6700")
-                    font = loadFont("/fonts/NanumBarunGothicBold.ttf", 20.0)!!
+                    style {
+                        fontFamily = SettingProps.font
+                        fontSize = 20.px
+                        fontWeight = FontWeight.BOLD
+                    }
                 }
                 text(StringProps.flowText3) {
                     fill = c("black")
-                    font = loadFont("/fonts/NanumBarunGothicBold.ttf", 13.0)!!
+                    style {
+                        fontFamily = SettingProps.font
+                        fontSize = 13.px
+                        fontWeight = FontWeight.BOLD
+                    }
                     translateY -= 2
                 }
             }
@@ -426,10 +442,10 @@ class MainView : View("File Manager") {
                                 else -> {
                                     Stage(StageStyle.UTILITY).apply {
                                         title = "폴더 추가"
-                                        this.scene = Scene(vbox {
+                                        scene = Scene(vbox {
                                             paddingAll = 8.0
                                             spacing = 3.0
-                                            style { fontFamily = MyStyles.defaultFont.family }
+                                            style { fontFamily = SettingProps.font }
                                             setResizable(false)
                                             val buttonWidth = 320.0
 
@@ -572,6 +588,77 @@ class MainView : View("File Manager") {
                     }
                 }
 
+                // 아이템 정보 표시
+                var popOver = PopOver()
+                row.setOnMouseClicked { event ->
+                    if (!row.isEmpty && event.button == MouseButton.SECONDARY) {
+                        println(Files.probeContentType(row.item.path))
+                        val type = Files.probeContentType(row.item.path) ?: "other"
+                        popOver = PopOver(
+                            VBox(
+                                when {
+                                    type.contains("image/") -> ImageView(Image("file:/${row.item.path}"))
+                                        .apply {
+                                            if (image.width > 800.0) fitWidth = 800.0
+                                            if (image.height > 800.0) fitHeight = 800.0
+                                            isPreserveRatio = true
+                                        }
+                                    type.contains("text/") -> {
+                                        var str = ""
+                                        var r: BufferedReader
+                                        val charsets = listOf("UTF-8", "EUC-KR", "UTF-16", "MS949", "CP949", "x-windows-949", "ISO", "EUC-JP", "SHIFT-JIS")
+                                        for (charset in charsets) {
+                                            r = BufferedReader(InputStreamReader(FileInputStream(row.item.path.toFile()), charset), 200)
+                                            for (i in 1..5) {
+                                                val temp = r.readLine()
+                                                if (temp != null) str += "$temp\n"
+                                            }
+                                            str += "...\n\n"
+                                            r.close()
+                                            if (!str.contains("\ufffd")) break
+                                            str = ""
+                                        }
+                                        Label(if (str != "") str else "내용 없음")
+                                    }
+                                    /*type.contains("audio/") -> {
+                                        // val audio = AudioSystem.getAudioFileFormat(row.item.path.toFile())
+                                        Label("길이: ")
+                                    }
+                                    type.contains("video/") -> {
+                                        Label("123")
+                                    }*/
+                                    else -> Label("미지원 파일")
+                                },
+                                Label("파일명: ${row.item.path.fileName}"),
+                                Label("파일 종류: $type"),
+                                Label("용량: ").apply {
+                                    var unit = 0
+                                    var length = row.item.path.toFile().length().toDouble()
+                                    while (length >= 1024 && unit < 6) {
+                                        length /= 1024
+                                        unit++
+                                    }
+                                    length = String.format("%.3f", length).toDouble()
+                                    when (unit) {
+                                        0 -> text += "$length Byte"
+                                        1 -> text += "$length KB"
+                                        2 -> text += "$length MB"
+                                        3 -> text += "$length GB"
+                                        4 -> text += "$length TB"
+                                        5 -> text += "$length PB"
+                                    }
+                                }
+                            ).apply {
+                                paddingAll = 5.0
+                                children.forEach { it.style { textFill = c("black") } }
+                            }
+                        )
+                        popOver.show(row)
+                    }
+                }
+                row.setOnMouseExited {
+                    popOver.hide()
+                }
                 row
             }
             addEventFilter(DragEvent.DRAG_DROPPED) {
@@ -866,7 +953,7 @@ class MainView : View("File Manager") {
         alert.dialogPane.apply {
             (scene.window as Stage).icons += Image("images/icon.png")
             style {
-                font = MyStyles.defaultFont
+                fontFamily = SettingProps.font
             }
         }
         owner?.also { alert.initOwner(it) }

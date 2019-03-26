@@ -4,6 +4,7 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.paint.Color
 import setting.MyStyles
+import setting.SettingProps
 import tornadofx.*
 
 /** 도움말 뷰
@@ -14,6 +15,7 @@ class HelpView : View() {
 
     override val root = vbox {
         addClass(MyStyles.main)
+        style { fontFamily = SettingProps.font }
         paddingAll = 8
         spacing = 3.0
 

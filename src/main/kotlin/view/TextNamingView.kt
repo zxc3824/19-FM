@@ -5,6 +5,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.TextField
 import javafx.scene.control.ToggleGroup
 import setting.MyStyles
+import setting.SettingProps
 import tornadofx.*
 
 class TextNamingView : View("텍스트 추가") {
@@ -28,6 +29,7 @@ class TextNamingView : View("텍스트 추가") {
 
     override val root = hbox {
         addClass(MyStyles.main)
+        style { fontFamily = SettingProps.font }
         alignment = Pos.CENTER
         paddingAll = 6.0
 
