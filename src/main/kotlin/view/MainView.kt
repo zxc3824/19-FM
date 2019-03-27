@@ -25,7 +25,6 @@ import setting.StringProps
 import tornadofx.*
 import tornadofx.controlsfx.borders
 import java.io.*
-import java.nio.charset.Charset
 import java.nio.file.Files
 import java.util.regex.PatternSyntaxException
 
