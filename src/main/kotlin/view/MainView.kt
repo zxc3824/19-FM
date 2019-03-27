@@ -25,6 +25,7 @@ import setting.StringProps
 import tornadofx.*
 import tornadofx.controlsfx.borders
 import java.io.*
+import java.nio.charset.Charset
 import java.nio.file.Files
 import java.util.regex.PatternSyntaxException
 
@@ -606,7 +607,7 @@ class MainView : View("File Manager") {
                                     type.contains("text/") -> {
                                         var str = ""
                                         var r: BufferedReader
-                                        val charsets = listOf("UTF-8", "EUC-KR", "UTF-16", "MS949", "CP949", "x-windows-949", "ISO", "EUC-JP", "SHIFT-JIS")
+                                        val charsets = listOf("UTF-8", "EUC-KR", "UTF-16", "MS949", "CP949", "x-windows-949", "ISO-8859-1", "EUC-JP", "SHIFT-JIS")
                                         for (charset in charsets) {
                                             r = BufferedReader(InputStreamReader(FileInputStream(row.item.path.toFile()), charset), 200)
                                             for (i in 1..5) {
