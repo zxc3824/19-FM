@@ -1,4 +1,5 @@
 package setting
+import javafx.geometry.Pos
 import javafx.scene.effect.DropShadow
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
@@ -22,6 +23,7 @@ class MyStyles : Stylesheet() {
         // 메인
         main {
             backgroundColor += Color.LIGHTSKYBLUE
+            fontSize = SettingProps.fontSize.pt
         }
 
         // 레이아웃
@@ -90,10 +92,17 @@ class MyStyles : Stylesheet() {
         tableView {
             fillHeight = true
         }
-        tableRowCell {
-            cellSize = 18.px
+        tableCell {
+            alignment = Pos.CENTER_LEFT
+            fontFamily = SettingProps.font
             padding = box(0.px, 0.px, 0.px, 2.px)
-            font = Font.font(8.5)
+            labelPadding = box(0.px)
+            backgroundInsets += box(0.px)
+        }
+        tableRowCell {
+            cellSize = SettingProps.cellSIze.px
+            fontSize = SettingProps.cellFontSize.pt
+            padding = box(0.px)
             textField {
                 padding = box(0.px)
                 backgroundRadius += box(0.px)

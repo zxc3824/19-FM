@@ -3,6 +3,7 @@ package data
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
+import java.nio.charset.Charset
 import java.nio.file.Path
 
 class FileItem(path: Path) {

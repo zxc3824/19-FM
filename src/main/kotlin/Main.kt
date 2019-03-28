@@ -10,6 +10,7 @@ import view.MainView
 class Main : App(MainView::class, MyStyles::class) {
 
     override fun start(stage: Stage) {
+        System.setProperty("sun.jnu.encoding", "UTF-8")
         stage.isResizable = false
         setStageIcon(Image("images/icon.png"))
         super.start(stage)

@@ -54,6 +54,19 @@ class SettingProps {
             set(value) { set("innerMoveCheck", value.toString()) }
         // 폰트
         internal val font = get("font")
+        // 설정
+        internal val width = get("width").toDouble()
+        internal val fontSize = get("fontSize").toDouble()
+        // 테이블 설정
+        internal val tableHeight = get("tableHeight").toDouble()
+        internal val extensionWidth = get("extensionWidth").toDouble()
+        internal val beforeWidth = get("beforeWidth").toDouble()
+        internal val afterWidth = get("afterWidth").toDouble()
+        internal val pathWidth = get("pathWidth").toDouble()
+        internal val cellSIze = get("cellSIze").toDouble()
+        internal val cellFontSize = get("cellFontSize").toDouble()
+        // 미리보기
+        internal val previewFontSize = get("previewFontSize").toDouble()
 
         private fun get(prop: String) =
             String(settings.getProperty(prop).toByteArray(Charset.forName("ISO-8859-1")), Charset.forName("UTF-8"))
