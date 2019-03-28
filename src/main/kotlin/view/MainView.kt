@@ -642,7 +642,7 @@ class MainView : View("File Manager") {
                                             fis.close()
                                             str = ""
                                         }
-                                        Label(if (str != "") str else "내용 없음")
+                                        Label(if (str != "") str else "내용 없음").apply { maxWidth = 800.0 }
                                     }
                                     else -> Label("미리보기 없음")
                                 },
