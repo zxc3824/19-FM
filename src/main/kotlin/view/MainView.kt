@@ -147,7 +147,7 @@ class MainView : View("File Manager") {
         }
 
         vbox {
-            prefWidth = 550.0
+            prefWidth = SettingProps.width
             vgrow = Priority.ALWAYS
 
             // Folder
@@ -373,18 +373,19 @@ class MainView : View("File Manager") {
 
                 fileTable = tableview {
                     items = files
+                    prefHeight = SettingProps.tableHeight
 
                     multiSelect(true)
 
                     column(StringProps.extension, FileItem::extension) {
-                        prefWidth = 50.0
+                        prefWidth = SettingProps.extensionWidth
                     }
                     column(StringProps.beforeFileName, FileItem::beforeName) {
-                        prefWidth = 160.0
+                        prefWidth = SettingProps.beforeWidth
                     }
                     column(StringProps.afterFileName, FileItem::afterName) {
                         makeEditable()
-                        prefWidth = 160.0
+                        prefWidth = SettingProps.afterWidth
 
                         onEditCommit {
                             if (rowValue.afterName == "") rowValue.afterName = rowValue.beforeName.value!!
@@ -392,7 +393,7 @@ class MainView : View("File Manager") {
                         }
                     }
                     column(StringProps.filePath, FileItem::filePath) {
-                        prefWidth = 155.0
+                        prefWidth = SettingProps.pathWidth
                     }
                 }
             }.removeWhen { changeChk.selectedProperty().not() }
@@ -605,29 +606,45 @@ class MainView : View("File Manager") {
                                         }
                                     type.contains("text/") -> {
                                         var str = ""
-                                        var r: BufferedReader
+                                        var fis: FileInputStream
+                                        var isr: InputStreamReader
+                                        var br: BufferedReader
                                         val charsets = listOf("UTF-8", "EUC-KR", "UTF-16", "MS949", "CP949", "x-windows-949", "ISO-8859-1", "EUC-JP", "SHIFT-JIS")
                                         for (charset in charsets) {
-                                            r = BufferedReader(InputStreamReader(FileInputStream(row.item.path.toFile()), charset), 200)
+                                            fis = FileInputStream(row.item.path.toFile())
+                                            isr = InputStreamReader(fis, charset)
+                                            br = BufferedReader(isr, 1024)
+                                            var temp: String?
                                             for (i in 1..5) {
-                                                val temp = r.readLine()
+                                                temp = br.readLine()
                                                 if (temp != null) str += "$temp\n"
+                                                else break
                                             }
-                                            str += "...\n\n"
-                                            r.close()
-                                            if (!str.contains("\ufffd")) break
+                                            if (!str.contains("\ufffd")) {
+                                                if (str != "") {
+                                                    for (i in 1..15) {
+                                                        temp = br.readLine()
+                                                        if (temp != null) str += "$temp\n"
+                                                        if (str.length > 1024) {
+                                                            str.substring(0 until 1024)
+                                                            break
+                                                        }
+                                                    }
+                                                    if (br.read() != -1) str += "...\n\n"
+                                                }
+                                                br.close()
+                                                isr.close()
+                                                fis.close()
+                                                break
+                                            }
+                                            br.close()
+                                            isr.close()
+                                            fis.close()
                                             str = ""
                                         }
                                         Label(if (str != "") str else "내용 없음")
                                     }
-                                    /*type.contains("audio/") -> {
-                                        // val audio = AudioSystem.getAudioFileFormat(row.item.path.toFile())
-                                        Label("길이: ")
-                                    }
-                                    type.contains("video/") -> {
-                                        Label("123")
-                                    }*/
-                                    else -> Label("미지원 파일")
+                                    else -> Label("미리보기 없음")
                                 },
                                 Label("파일명: ${row.item.path.fileName}"),
                                 Label("파일 종류: $type"),
@@ -650,7 +667,11 @@ class MainView : View("File Manager") {
                                 }
                             ).apply {
                                 paddingAll = 5.0
-                                children.forEach { it.style { textFill = c("black") } }
+                                children.forEach { it.style {
+                                    textFill = c("black")
+                                    fontFamily = SettingProps.font
+                                    fontSize = SettingProps.previewFontSize.pt
+                                } }
                             }
                         )
                         popOver.show(row)
