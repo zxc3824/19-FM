@@ -633,13 +633,9 @@ class MainView : View("File Manager") {
                                                     if (br.read() != -1) str += "...\n\n"
                                                 }
                                                 br.close()
-                                                isr.close()
-                                                fis.close()
                                                 break
                                             }
                                             br.close()
-                                            isr.close()
-                                            fis.close()
                                             str = ""
                                         }
                                         Label(if (str != "") str else "내용 없음").apply { maxWidth = 800.0 }
