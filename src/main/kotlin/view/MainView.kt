@@ -785,6 +785,10 @@ class MainView : View("File Manager") {
                     searchExtension.text,
                     innerSearchChk.isSelected
                 ).map { FileItem(it) })
+                if (!remainTextChk.isSelected) { // 검색어 유지 X
+                    searchText.text = ""
+                    searchExtension.text = ""
+                }
                 if (beforeSize != files.size) files.replaceDistinct()
             } catch (e: PatternSyntaxException) {
                 alert(Alert.AlertType.ERROR, "정규식 에러", "Java/Kotlin/Go 에서의 정규식을 사용해야 합니다.")

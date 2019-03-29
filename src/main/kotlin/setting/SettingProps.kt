@@ -8,7 +8,6 @@ import kotlin.collections.set
 
 class SettingProps {
     companion object {
-        // 한 번만 불러올 내용은 val, 아니면 var
         private val file =
             if (File("Settings.properties").exists()) File("Settings.properties")
             else File("src/main/resources/Settings.properties")
